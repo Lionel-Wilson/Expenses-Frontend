@@ -1,57 +1,30 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Expenses } from "./interfaces/expenses";
 import { formatDate } from "./utils.ts/format-date";
+import { fetchExpenses } from "./services/expensesServices";
+import "./styles/App.css"; // Import the CSS file
 
 function App() {
-  const divStyle = {
-    borderBottomStyle: "solid",
-    borderWidth: "3px",
-    marginBottom: "2em",
-  };
-  const loadingDivStyle = {
-    fontSize: "1.2rem",
-    fontWeight: "400",
-    color: "#333",
-    margin: "20px",
-    padding: 0,
-    display: "Flex",
-    justifyContent: "center",
-  };
-
   const [data, setData] = useState<Expenses[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const loadExpenses = async () => {
       try {
-        const response = await fetch(
-          "https://expenses-backend-mu.vercel.app/expenses",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Username: "lionel.wilson",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error);
-      } finally {
+        const data = await fetchExpenses();
+        setData(data);
         setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
       }
     };
-
-    fetchData();
+    loadExpenses();
   }, []);
 
   if (isLoading) {
     return (
-      <div style={loadingDivStyle}>
+      <div className="loadingDivStyle">
         <h1>Loading...</h1>
       </div>
     );
@@ -63,7 +36,7 @@ function App() {
 
   return (
     <div id="template-text">
-      <div style={divStyle}>
+      <div className="divStyle">
         <h1>Expenses</h1>
       </div>
       <table className="table">
@@ -81,7 +54,6 @@ function App() {
           {data.map((item) => (
             <tr key={item.id}>
               <th scope="row">{formatDate(item.date)}</th>
-
               <td>{item.merchant}</td>
               <td>{item.amount}</td>
               <td>{item.category}</td>
