@@ -1,5 +1,3 @@
-// src/components/Table.tsx
-import React from "react";
 import { Expenses } from "../interfaces/expenses";
 import { formatDate } from "../utils.ts/format-date";
 
@@ -8,7 +6,7 @@ interface TableProps {
   data: Expenses[];
 }
 
-const Table: React.FC<TableProps> = ({ headers, data }) => {
+function Table({ headers, data }: TableProps) {
   return (
     <table className="table">
       <thead>
@@ -34,6 +32,6 @@ const Table: React.FC<TableProps> = ({ headers, data }) => {
       </tbody>
     </table>
   );
-};
+}
 
 export default Table;
