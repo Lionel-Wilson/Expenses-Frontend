@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Expenses } from "./interfaces/expenses";
 import { fetchExpenses } from "./services/expensesServices";
 import Title from "./components/Title";
